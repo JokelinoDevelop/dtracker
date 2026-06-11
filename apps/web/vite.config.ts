@@ -9,13 +9,16 @@ import { defineConfig } from "vite";
 const config = defineConfig({
   plugins: [
     devtools(),
-    nitro({ rolldownConfig: { external: [/^@sentry\//u] } }),
+    nitro(),
     tailwindcss(),
     tanstackStart(),
     viteReact(),
     babel({ presets: [reactCompilerPreset()] }),
   ],
   resolve: { tsconfigPaths: true },
+  server: {
+    port: 5173,
+  },
 });
 
 export default config;

@@ -1,3 +1,4 @@
+// oxlint-disable typescript/consistent-type-definitions
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 
@@ -21,7 +22,7 @@ export function getRouter() {
 }
 
 declare module "@tanstack/react-router" {
-  type Register = {
+  interface Register {
     router: ReturnType<typeof getRouter>;
-  };
+  }
 }

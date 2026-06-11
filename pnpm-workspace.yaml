@@ -1,9 +1,13 @@
 packages:
   - "apps/*"
   - "packages/*"
+
 allowBuilds:
+  '@scarf/scarf': true
+  '@swc/core': true
   esbuild: true
   lefthook: true
+
 minimumReleaseAgeExclude:
   - "@oxfmt/binding-android-arm-eabi@0.54.0"
   - "@oxfmt/binding-android-arm64@0.54.0"

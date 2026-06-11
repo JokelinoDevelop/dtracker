@@ -19,6 +19,29 @@ export default defineConfig({
   ],
   overrides: [
     {
+      files: ["apps/api/src/core/database/schemas/**/*.{ts,tsx}"],
+      rules: { "sort-keys": "off" },
+    },
+    {
+      files: ["apps/api/**/*.{ts,tsx}"],
+      rules: {
+        "class-methods-use-this": "off",
+        "typescript/consistent-type-imports": "off",
+        "typescript/no-extraneous-class": [
+          "error",
+          {
+            allowWithDecorator: true,
+          },
+        ],
+        "typescript/parameter-properties": [
+          "error",
+          {
+            prefer: "parameter-property",
+          },
+        ],
+      },
+    },
+    {
       // TanStack Router: property order in createFileRoute/createRoute affects TS inference;
       // eslint(sort-keys) would alphabetize and break ctx.deps / search types.
       files: ["apps/web/src/routes/**/*.{ts,tsx}"],
@@ -28,20 +51,6 @@ export default defineConfig({
         "@tanstack/router/create-route-property-order": "error",
         "@tanstack/router/route-param-names": "error",
         "sort-keys": "off",
-      },
-    },
-    {
-      // DB table definitions should keep primary key columns (`id`) first for readability
-      // and parity with migration/DDL conventions; do not auto-alphabetize keys here.
-      files: ["packages/shared/src/drizzle/tables/**/*.{ts,tsx}"],
-      rules: {
-        "sort-keys": "off",
-      },
-    },
-    {
-      files: ["**/*.errors.ts"],
-      rules: {
-        "max-classes-per-file": "off",
       },
     },
   ],
@@ -62,6 +71,8 @@ export default defineConfig({
         variables: true,
       },
     ],
+    "react/no-children-prop": "off",
     "typescript/consistent-type-definitions": ["error", "type"],
+    "unicorn/import-style": ["error"],
   },
 });

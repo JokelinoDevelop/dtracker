@@ -6,11 +6,12 @@
     "#/*": "./src/*"
   },
   "scripts": {
-    "dev": "vite dev --port 3000",
+    "dev": "vite dev",
     "generate-routes": "tsr generate",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "check-types": "tsgo --noEmit"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",
@@ -47,10 +48,10 @@
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "@typescript/native-preview": "7.0.0-dev.20260609.1",
     "@vitejs/plugin-react": "^6.0.1",
     "babel-plugin-react-compiler": "^1.0.0",
     "jsdom": "^28.1.0",
-    "typescript": "^6.0.2",
     "vite": "^8.0.0",
     "vitest": "^4.1.5"
   }
