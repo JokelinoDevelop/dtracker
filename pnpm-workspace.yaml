@@ -3,8 +3,8 @@ packages:
   - "packages/*"
 
 allowBuilds:
-  '@scarf/scarf': true
-  '@swc/core': true
+  "@scarf/scarf": true
+  "@swc/core": true
   esbuild: true
   lefthook: true
 
