@@ -30,18 +30,11 @@ async function main() {
 
   console.log("Seeding database...");
   await seed(database, schema).refine((f) => ({
-    accounts: {
-      columns: {
-        email: f.email(),
-      },
-    },
     users: {
       columns: {
-        firstName: f.firstName(),
-        lastName: f.lastName(),
-        phone: f.phoneNumber(),
+        email: f.email(),
+        name: f.fullName(),
       },
-      count: 5,
     },
   }));
 

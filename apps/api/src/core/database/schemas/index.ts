@@ -1,2 +1,2 @@
 // oxlint-disable oxc/no-barrel-file
-export * from "./users.table";
+export * from "./auth.table";

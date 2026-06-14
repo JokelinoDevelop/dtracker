@@ -14,8 +14,7 @@ import { THROTTLER_OPTIONS } from "./throttler.helper";
         errorMessage: "Wow! Slow down. You have hit the rate limit",
         generateKey: (trackerString, throttlerName) =>
           `${trackerString}:${throttlerName}`,
-        // handles X-Forwarded-For (proxies, Docker, nginx)
-        getTracker: (req) => (req.ips?.length ? req.ips[0] : req.ip),
+        getTracker: (req) => (req.ips?.length ? req.ips[0] : req.ip), // handles X-Forwarded-For (proxies, Docker, nginx)
         storage: new ThrottlerStorageRedisService({
           host: config.getOrThrow("REDIS_HOST"),
           password: config.get("REDIS_PASSWORD"),

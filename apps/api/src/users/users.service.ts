@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 
 import type { DB } from "../core/database/database.client";
 import { InjectDb } from "../core/database/database.provider";
-import { users } from "../core/database/schemas";
+import { users } from "../core/database/schemas/auth.table";
 
 @Injectable()
 export class UsersService {

@@ -16,7 +16,7 @@ export class HttpExceptionFilter extends BaseExceptionFilter {
       }
     }
 
-    // eslint-disable-next-line promise/prefer-await-to-then, promise/valid-params
+    // oxlint-disable-next-line promise/valid-params promise/prefer-await-to-then
     super.catch(exception, host);
   }
 }

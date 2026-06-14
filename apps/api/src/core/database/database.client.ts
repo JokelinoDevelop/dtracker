@@ -1,6 +1,10 @@
+import { config } from "dotenv";
+import { expand } from "dotenv-expand";
 import { drizzle } from "drizzle-orm/node-postgres";
 
 import { relations } from "./schemas/relations";
+
+expand(config());
 
 const { POSTGRES_URL } = process.env;
 

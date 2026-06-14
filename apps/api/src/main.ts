@@ -10,6 +10,7 @@ import { AppModule } from "./app.module";
 // oxlint-disable-next-line func-style
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
+    bodyParser: false, // Required for better auth
     bufferLogs: true,
   });
 
@@ -24,11 +25,15 @@ async function bootstrap() {
       .build()
   );
 
-  SwaggerModule.setup("api", app, cleanupOpenApiDoc(openApiDoc));
-
-  app.use(helmet());
+  SwaggerModule.setup("api/swagger", app, cleanupOpenApiDoc(openApiDoc));
 
   const configService: ConfigService = app.get(ConfigService);
+
+  const NODE_ENV = configService.getOrThrow<string>("NODE_ENV");
+
+  if (NODE_ENV === "production") {
+    app.use(helmet());
+  }
 
   const allowedOrigins = configService.getOrThrow("ALLOWED_ORIGINS");
 
