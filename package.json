@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-router": "^1.162.0",
-    "@typescript/native-preview": "7.0.0-dev.20260609.1",
+    "@typescript/native-preview": "catalog:",
     "lefthook": "^2.1.9",
     "oxfmt": "^0.54.0",
     "oxlint": "^1.69.0",

@@ -12,7 +12,7 @@ export const FieldErrors = ({ meta }: FieldErrorsProps) => {
 
   return meta.errors.map(({ message }: ZodError, index) => (
     <FieldError key={index} className="text-sm font-medium text-destructive">
-      {message}
+      - {message}
     </FieldError>
   ));
 };

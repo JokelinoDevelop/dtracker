@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as authIndexRouteImport } from './routes/(auth)/index'
 import { Route as authRegisterRouteImport } from './routes/(auth)/register'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
+import { Route as ProtectedDashboardIndexRouteImport } from './routes/_protected/dashboard/index'
 
+const ProtectedRoute = ProtectedRouteImport.update({
+  id: '/_protected',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const authIndexRoute = authIndexRouteImport.update({
   id: '/(auth)/',
   path: '/',
@@ -28,32 +34,48 @@ const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProtectedDashboardIndexRoute = ProtectedDashboardIndexRouteImport.update({
+  id: '/dashboard/',
+  path: '/dashboard/',
+  getParentRoute: () => ProtectedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof authIndexRoute
   '/forgot-password': typeof authForgotPasswordRoute
   '/register': typeof authRegisterRoute
-  '/': typeof authIndexRoute
+  '/dashboard/': typeof ProtectedDashboardIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof authIndexRoute
   '/forgot-password': typeof authForgotPasswordRoute
   '/register': typeof authRegisterRoute
-  '/': typeof authIndexRoute
+  '/dashboard': typeof ProtectedDashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_protected': typeof ProtectedRouteWithChildren
   '/(auth)/forgot-password': typeof authForgotPasswordRoute
   '/(auth)/register': typeof authRegisterRoute
   '/(auth)/': typeof authIndexRoute
+  '/_protected/dashboard/': typeof ProtectedDashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/forgot-password' | '/register' | '/'
+  fullPaths: '/' | '/forgot-password' | '/register' | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/forgot-password' | '/register' | '/'
-  id: '__root__' | '/(auth)/forgot-password' | '/(auth)/register' | '/(auth)/'
+  to: '/' | '/forgot-password' | '/register' | '/dashboard'
+  id:
+    | '__root__'
+    | '/_protected'
+    | '/(auth)/forgot-password'
+    | '/(auth)/register'
+    | '/(auth)/'
+    | '/_protected/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  ProtectedRoute: typeof ProtectedRouteWithChildren
   authForgotPasswordRoute: typeof authForgotPasswordRoute
   authRegisterRoute: typeof authRegisterRoute
   authIndexRoute: typeof authIndexRoute
@@ -61,6 +83,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_protected': {
+      id: '/_protected'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof ProtectedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(auth)/': {
       id: '/(auth)/'
       path: '/'
@@ -82,10 +111,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_protected/dashboard/': {
+      id: '/_protected/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof ProtectedDashboardIndexRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
   }
 }
 
+interface ProtectedRouteChildren {
+  ProtectedDashboardIndexRoute: typeof ProtectedDashboardIndexRoute
+}
+
+const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedDashboardIndexRoute: ProtectedDashboardIndexRoute,
+}
+
+const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
+  ProtectedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
+  ProtectedRoute: ProtectedRouteWithChildren,
   authForgotPasswordRoute: authForgotPasswordRoute,
   authRegisterRoute: authRegisterRoute,
   authIndexRoute: authIndexRoute,
@@ -93,12 +142,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

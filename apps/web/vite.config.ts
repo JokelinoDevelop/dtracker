@@ -1,19 +1,15 @@
-import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
-import { tanstackStart } from "@tanstack/react-start/plugin/vite";
-import viteReact, { reactCompilerPreset } from "@vitejs/plugin-react";
-import { nitro } from "nitro/vite";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
+import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 const config = defineConfig({
   plugins: [
     devtools(),
-    nitro(),
     tailwindcss(),
-    tanstackStart(),
+    tanstackRouter({ autoCodeSplitting: true, target: "react" }),
     viteReact(),
-    babel({ presets: [reactCompilerPreset()] }),
   ],
   resolve: { tsconfigPaths: true },
   server: {

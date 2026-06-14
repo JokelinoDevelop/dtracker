@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { GalleryVerticalEnd } from "lucide-react";
 
 import { SignInForm } from "./sign-in-form";
 
@@ -9,17 +10,20 @@ export function SignInPage() {
 
       <div className="flex items-center justify-center px-6 relative">
         {/* Brand */}
-        <div className="absolute top-6 left-10">
+        <div className="absolute flex gap-x-2 items-center top-6 left-10">
+          <div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+            <GalleryVerticalEnd className="size-4" />
+          </div>
           <span className="text-lg font-semibold tracking-tight">dtracker</span>
         </div>
 
-        <div className="w-full max-w-sm space-y-10">
+        <div className="w-full max-w-sm space-y-6">
           {/* Header */}
           <div className="space-y-5">
             <h1 className="text-5xl font-semibold">Sign in</h1>
 
             <p className="text-muted-foreground">
-              Don’t have an account?{" "}
+              Don't have an account?{" "}
               <Link to="/register" className="text-primary underline">
                 Create now
               </Link>

@@ -1,14 +1,25 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Lock, Mail } from "lucide-react";
 
+import { authClient } from "#/lib/better-auth/auth-client.ts";
 import { useAppForm } from "@/components/form/hooks";
 import { FieldGroup } from "@/components/ui/field";
 
 import { signInFormOptions } from "./sign-in-form.options";
 
 export function SignInForm() {
+  const navigate = useNavigate();
   const form = useAppForm({
     ...signInFormOptions,
+    onSubmit: async ({ value }) => {
+      await authClient.signIn.email({
+        email: value.email,
+        password: value.password,
+        rememberMe: value.rememberMe,
+      });
+
+      await navigate({ to: "/dashboard" });
+    },
   });
   return (
     <form
@@ -49,7 +60,9 @@ export function SignInForm() {
           <div>
             <form.AppField
               name="rememberMe"
-              children={(field) => <field.CheckboxField label="Remember me" />}
+              children={(field) => (
+                <field.CheckboxField id="rememberMe" label="Remember me" />
+              )}
             />
           </div>
 
@@ -63,7 +76,7 @@ export function SignInForm() {
       </FieldGroup>
 
       <form.AppForm>
-        <form.SubmitButton size="xl" className="w-full py-5 rounded-xl">
+        <form.SubmitButton size="lg" className="w-full rounded-xl">
           Sign In
         </form.SubmitButton>
       </form.AppForm>

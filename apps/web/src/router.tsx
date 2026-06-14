@@ -1,6 +1,5 @@
 // oxlint-disable typescript/consistent-type-definitions
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
-import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 
 import { getContext } from "./integrations/tanstack-query/root-provider";
 import { routeTree } from "./routeTree.gen";
@@ -15,8 +14,6 @@ export function getRouter() {
     routeTree,
     scrollRestoration: true,
   });
-
-  setupRouterSsrQueryIntegration({ queryClient: context.queryClient, router });
 
   return router;
 }

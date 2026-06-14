@@ -13,11 +13,15 @@ if (!ALLOWED_ORIGINS) {
 
 export const auth = betterAuth({
   advanced: {
+    crossSubDomainCookies: {
+      enabled: true,
+    },
     database: {
       generateId: "uuid",
     },
     useSecureCookies: process.env.NODE_ENV === "production",
   },
+  appName: "DTracker",
   baseURL: process.env.API_URL,
   database: drizzleAdapter(db, {
     provider: "pg",
