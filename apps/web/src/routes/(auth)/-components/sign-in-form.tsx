@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Lock, Mail } from "lucide-react";
+import { toast } from "sonner";
 
 import { authClient } from "#/lib/better-auth/auth-client.ts";
 import { useAppForm } from "@/components/form/hooks";
@@ -12,11 +13,18 @@ export function SignInForm() {
   const form = useAppForm({
     ...signInFormOptions,
     onSubmit: async ({ value }) => {
-      await authClient.signIn.email({
+      const { data, error } = await authClient.signIn.email({
         email: value.email,
         password: value.password,
         rememberMe: value.rememberMe,
       });
+
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      toast.success(`Welcome back ${data.user.name}!`);
 
       await navigate({ to: "/dashboard" });
     },
@@ -47,10 +55,9 @@ export function SignInForm() {
         <form.AppField
           name="password"
           children={(field) => (
-            <field.TextField
+            <field.PasswordField
               label="Password"
               placeholder="••••••••"
-              type="password"
               id="password"
               iconLeft={<Lock />}
             />

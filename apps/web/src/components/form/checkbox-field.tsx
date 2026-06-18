@@ -1,4 +1,3 @@
-import { Checkbox as CheckboxPrimitive } from "radix-ui";
 import { type ComponentProps } from "react";
 
 import { Checkbox } from "../ui/checkbox";
@@ -9,14 +8,14 @@ import { useFieldContext } from "./hooks";
 type CheckboxFieldProps = {
   description?: string;
   label?: string;
-} & ComponentProps<typeof CheckboxPrimitive.Root>;
+} & ComponentProps<typeof Checkbox>;
 
 export function CheckboxField({
   description,
   label,
   ...props
 }: CheckboxFieldProps) {
-  const field = useFieldContext<string>();
+  const field = useFieldContext<boolean>();
 
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
 
@@ -24,22 +23,18 @@ export function CheckboxField({
     <Field orientation="horizontal" aria-invalid={isInvalid}>
       <Checkbox
         {...props}
-        aria-invalid={isInvalid}
         id={field.name}
-        value={field.state.value}
-        onChange={(e) => field.handleChange(e.target.value)}
+        checked={field.state.value}
+        onCheckedChange={(checked) => field.handleChange(Boolean(checked))}
         onBlur={field.handleBlur}
-        {...props}
+        aria-invalid={isInvalid}
       />
+
       <FieldContent>
-        {label ? (
-          <FieldLabel htmlFor="finder-pref-9k2-sync-folders-nep">
-            {label}
-          </FieldLabel>
-        ) : null}
-        {description ? (
-          <FieldDescription>{description}</FieldDescription>
-        ) : null}
+        {label && <FieldLabel htmlFor={field.name}>{label}</FieldLabel>}
+
+        {description && <FieldDescription>{description}</FieldDescription>}
+
         <FieldErrors meta={field.state.meta} />
       </FieldContent>
     </Field>

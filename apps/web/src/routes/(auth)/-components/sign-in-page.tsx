@@ -7,7 +7,6 @@ export function SignInPage() {
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
       {/* Left side */}
-
       <div className="flex items-center justify-center px-6 relative">
         {/* Brand */}
         <div className="absolute flex gap-x-2 items-center top-6 left-10">
