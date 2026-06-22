@@ -31,16 +31,18 @@ import {
 } from "#/components/ui/sidebar.tsx";
 import { authClient } from "#/lib/better-auth/auth-client.ts";
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+export function NavUser() {
   const navigate = useNavigate();
+
+  const { data, error: authError, isPending } = authClient.useSession();
+
+  if (authError) {
+    return <div>Something bad happened {authError.message}</div>;
+  }
+
+  if (isPending) {
+    return <div>Loading</div>;
+  }
 
   const { isMobile } = useSidebar();
   return (
@@ -53,12 +55,12 @@ export function NavUser({
             }
           >
             <Avatar>
-              <AvatarImage src={user.avatar} alt={user.name} />
+              <AvatarImage />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">{user.name}</span>
-              <span className="truncate text-xs">{user.email}</span>
+              <span className="truncate font-medium">{data?.user.name}</span>
+              <span className="truncate text-xs">{data?.user.email}</span>
             </div>
             <ChevronsUpDownIcon className="ml-auto size-4" />
           </DropdownMenuTrigger>
@@ -72,12 +74,14 @@ export function NavUser({
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar>
-                    <AvatarImage src={user.avatar} alt={user.name} />
+                    <AvatarImage alt={data?.user.name} />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">{user.name}</span>
-                    <span className="truncate text-xs">{user.email}</span>
+                    <span className="truncate font-medium">
+                      {data?.user.name}
+                    </span>
+                    <span className="truncate text-xs">{data?.user.email}</span>
                   </div>
                 </div>
               </DropdownMenuLabel>

@@ -23,11 +23,13 @@ export class BootstrapService implements OnApplicationBootstrap {
     });
 
     if (adminUser) {
-      this.logger.warn("Admin users already exists, skipping admin creation!");
+      this.logger.warn(
+        "An admin user already exists, skipping admin creation!"
+      );
       return;
     }
 
-    const res = await this.authService.api
+    await this.authService.api
       .createUser({
         body: {
           email: this.configService.getOrThrow<string>("ADMIN_EMAIL"),
@@ -39,9 +41,5 @@ export class BootstrapService implements OnApplicationBootstrap {
       .catch((error: Error) => {
         this.logger.error(error.message);
       });
-
-    console.log(res);
-
-    this.logger.debug("ADMIN USER", res);
   }
 }

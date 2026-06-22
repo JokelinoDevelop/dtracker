@@ -14,7 +14,7 @@ import { Route as authRouteRouteImport } from './routes/(auth)/route'
 import { Route as authIndexRouteImport } from './routes/(auth)/index'
 import { Route as authRegisterRouteImport } from './routes/(auth)/register'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
-import { Route as ProtectedDashboardRouteRouteImport } from './routes/_protected/dashboard/route'
+import { Route as ProtectedUsersIndexRouteImport } from './routes/_protected/users/index'
 import { Route as ProtectedDashboardIndexRouteImport } from './routes/_protected/dashboard/index'
 
 const ProtectedRoute = ProtectedRouteImport.update({
@@ -40,59 +40,55 @@ const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => authRouteRoute,
 } as any)
-const ProtectedDashboardRouteRoute = ProtectedDashboardRouteRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const ProtectedUsersIndexRoute = ProtectedUsersIndexRouteImport.update({
+  id: '/users/',
+  path: '/users/',
   getParentRoute: () => ProtectedRoute,
 } as any)
 const ProtectedDashboardIndexRoute = ProtectedDashboardIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => ProtectedDashboardRouteRoute,
+  id: '/dashboard/',
+  path: '/dashboard/',
+  getParentRoute: () => ProtectedRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof authIndexRoute
-  '/dashboard': typeof ProtectedDashboardRouteRouteWithChildren
   '/forgot-password': typeof authForgotPasswordRoute
   '/register': typeof authRegisterRoute
   '/dashboard/': typeof ProtectedDashboardIndexRoute
+  '/users/': typeof ProtectedUsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof authIndexRoute
   '/forgot-password': typeof authForgotPasswordRoute
   '/register': typeof authRegisterRoute
   '/dashboard': typeof ProtectedDashboardIndexRoute
+  '/users': typeof ProtectedUsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(auth)': typeof authRouteRouteWithChildren
   '/_protected': typeof ProtectedRouteWithChildren
-  '/_protected/dashboard': typeof ProtectedDashboardRouteRouteWithChildren
   '/(auth)/forgot-password': typeof authForgotPasswordRoute
   '/(auth)/register': typeof authRegisterRoute
   '/(auth)/': typeof authIndexRoute
   '/_protected/dashboard/': typeof ProtectedDashboardIndexRoute
+  '/_protected/users/': typeof ProtectedUsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/dashboard'
-    | '/forgot-password'
-    | '/register'
-    | '/dashboard/'
+  fullPaths: '/' | '/forgot-password' | '/register' | '/dashboard/' | '/users/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/forgot-password' | '/register' | '/dashboard'
+  to: '/' | '/forgot-password' | '/register' | '/dashboard' | '/users'
   id:
     | '__root__'
     | '/(auth)'
     | '/_protected'
-    | '/_protected/dashboard'
     | '/(auth)/forgot-password'
     | '/(auth)/register'
     | '/(auth)/'
     | '/_protected/dashboard/'
+    | '/_protected/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -137,19 +133,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authForgotPasswordRouteImport
       parentRoute: typeof authRouteRoute
     }
-    '/_protected/dashboard': {
-      id: '/_protected/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof ProtectedDashboardRouteRouteImport
+    '/_protected/users/': {
+      id: '/_protected/users/'
+      path: '/users'
+      fullPath: '/users/'
+      preLoaderRoute: typeof ProtectedUsersIndexRouteImport
       parentRoute: typeof ProtectedRoute
     }
     '/_protected/dashboard/': {
       id: '/_protected/dashboard/'
-      path: '/'
+      path: '/dashboard'
       fullPath: '/dashboard/'
       preLoaderRoute: typeof ProtectedDashboardIndexRouteImport
-      parentRoute: typeof ProtectedDashboardRouteRoute
+      parentRoute: typeof ProtectedRoute
     }
   }
 }
@@ -170,26 +166,14 @@ const authRouteRouteWithChildren = authRouteRoute._addFileChildren(
   authRouteRouteChildren,
 )
 
-interface ProtectedDashboardRouteRouteChildren {
-  ProtectedDashboardIndexRoute: typeof ProtectedDashboardIndexRoute
-}
-
-const ProtectedDashboardRouteRouteChildren: ProtectedDashboardRouteRouteChildren =
-  {
-    ProtectedDashboardIndexRoute: ProtectedDashboardIndexRoute,
-  }
-
-const ProtectedDashboardRouteRouteWithChildren =
-  ProtectedDashboardRouteRoute._addFileChildren(
-    ProtectedDashboardRouteRouteChildren,
-  )
-
 interface ProtectedRouteChildren {
-  ProtectedDashboardRouteRoute: typeof ProtectedDashboardRouteRouteWithChildren
+  ProtectedDashboardIndexRoute: typeof ProtectedDashboardIndexRoute
+  ProtectedUsersIndexRoute: typeof ProtectedUsersIndexRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
-  ProtectedDashboardRouteRoute: ProtectedDashboardRouteRouteWithChildren,
+  ProtectedDashboardIndexRoute: ProtectedDashboardIndexRoute,
+  ProtectedUsersIndexRoute: ProtectedUsersIndexRoute,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(

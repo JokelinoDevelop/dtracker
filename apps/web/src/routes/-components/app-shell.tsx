@@ -1,6 +1,7 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import type React from "react";
 
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar } from "#/routes/-components/app-sidebar.tsx";
+import { ThemeToggle } from "@/components/theme-toggle.tsx";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,17 +17,17 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 
-export const Route = createFileRoute("/_protected/dashboard")({
-  component: RouteComponent,
-});
+type AppShellProps = {
+  children: React.ReactNode;
+};
 
-function RouteComponent() {
+export function AppShell({ children }: AppShellProps) {
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2">
-          <div className="flex items-center gap-2 px-4">
+        <header className="flex justify-between h-16 shrink-0 items-center gap-2  px-4">
+          <div className="flex items-center gap-2">
             <SidebarTrigger className="-ml-1" />
             <Separator
               orientation="vertical"
@@ -46,10 +47,11 @@ function RouteComponent() {
               </BreadcrumbList>
             </Breadcrumb>
           </div>
+          <ThemeToggle />
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <Outlet />
+            {children}
           </div>
         </div>
       </SidebarInset>
