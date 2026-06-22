@@ -6,6 +6,7 @@ import { ZodValidationPipe, ZodSerializerInterceptor } from "nestjs-zod";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { auth } from "./auth/auth.config";
+import { BootstrapModule } from "./bootstrap/bootstrap.module";
 import { HttpExceptionFilter } from "./common/filters/http-exception.filter";
 import { CoreDatabaseModule } from "./core/database/database.module";
 import { CoreEnvConfigModule } from "./core/env-config/env-config.module";
@@ -25,6 +26,7 @@ import { UsersModule } from "./users/users.module";
       disableTrustedOriginsCors: true, // Disable CORS in Better Auth since we're handling it globally
     }),
     UsersModule,
+    BootstrapModule,
   ],
   providers: [
     AppService,

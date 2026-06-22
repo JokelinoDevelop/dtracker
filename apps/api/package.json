@@ -24,7 +24,8 @@
     "db:studio": "drizzle-kit studio",
     "db:check": "drizzle-kit check",
     "db:pull": "drizzle-kit pull",
-    "db:seed": "tsx src/core/database/seed.ts"
+    "db:seed": "tsx src/core/database/seed.ts",
+    "auth:generate": "pnpm dlx auth generate --config=./src/auth/auth.config.ts"
   },
   "dependencies": {
     "@nest-lab/throttler-storage-redis": "^1.2.0",

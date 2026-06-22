@@ -3,6 +3,8 @@ import { ConfigService } from "@nestjs/config";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 
+import { relations } from "./schemas/relations";
+
 export const DATABASE_CONNECTION = Symbol("DATABASE_CONNECTION");
 
 export const DatabaseProvider = {
@@ -17,10 +19,11 @@ export const DatabaseProvider = {
 
     return drizzle({
       client,
+      relations,
     });
   },
 } satisfies Provider;
 
 export const InjectDb = () => Inject(DATABASE_CONNECTION);
 
-export type DB = ReturnType<typeof DatabaseProvider.useFactory>;
+export type DatabaseService = ReturnType<typeof DatabaseProvider.useFactory>;

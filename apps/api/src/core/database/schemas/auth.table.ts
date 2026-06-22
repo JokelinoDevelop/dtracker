@@ -8,7 +8,12 @@ import {
   integer,
   uuid,
   index,
+  pgEnum,
 } from "drizzle-orm/pg-core";
+
+import { roles } from "@/auth/auth.permissions";
+
+export const userRole = pgEnum("user_role", roles);
 
 export const users = pgTable("users", {
   id: uuid("id")
@@ -23,6 +28,10 @@ export const users = pgTable("users", {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
+  role: userRole(),
+  banned: boolean("banned").default(false),
+  banReason: text("ban_reason"),
+  banExpires: timestamp("ban_expires"),
 });
 
 export const sessions = pgTable(
@@ -42,6 +51,7 @@ export const sessions = pgTable(
     userId: uuid("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
+    impersonatedBy: text("impersonated_by"),
   },
   (table) => [index("sessions_userId_idx").on(table.userId)]
 );

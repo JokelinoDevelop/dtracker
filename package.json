@@ -16,7 +16,8 @@
     "db:studio": "pnpm --filter @dtracker/api db:studio",
     "db:check": "pnpm --filter @dtracker/api db:check",
     "db:pull": "pnpm --filter @dtracker/api db:pull",
-    "db:seed": "pnpm --filter @dtracker/api db:seed"
+    "db:seed": "pnpm --filter @dtracker/api db:seed",
+    "auth:generate": "pnpm --filter @dtracker/api auth:generate"
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-router": "^1.162.0",
@@ -30,5 +31,5 @@
   "engines": {
     "node": ">=24"
   },
-  "packageManager": "pnpm@11.6.0"
+  "packageManager": "pnpm@11.8.0"
 }

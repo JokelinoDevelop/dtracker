@@ -12,7 +12,18 @@ const PINO_LOG_LEVEL_ARRAY = [
   "trace",
 ];
 
+const passwordSchema = z
+  .string()
+  .min(8, "Password must be at least 8 characters")
+  .max(20, "Password must be at most 20 characters")
+  .regex(/[a-z]/u, "Must include a lowercase letter")
+  .regex(/[A-Z]/u, "Must include an uppercase letter")
+  .regex(/[0-9]/u, "Must include a number")
+  .regex(/[^a-zA-Z0-9]/u, "Must include a special character");
+
 export const envConfigSchema = z.object({
+  ADMIN_EMAIL: z.email(),
+  ADMIN_PASSWORD: passwordSchema,
   ALLOWED_ORIGINS: z
     .string()
     .transform((val) => val.split(",").map((v) => v.trim())),

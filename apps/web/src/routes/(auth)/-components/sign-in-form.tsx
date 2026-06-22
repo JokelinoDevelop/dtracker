@@ -2,9 +2,9 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { Lock, Mail } from "lucide-react";
 import { toast } from "sonner";
 
-import { authClient } from "#/lib/better-auth/auth-client.ts";
 import { useAppForm } from "@/components/form/hooks";
 import { FieldGroup } from "@/components/ui/field";
+import { authClient } from "@/lib/better-auth/auth-client.ts";
 
 import { signInFormOptions } from "./sign-in-form.options";
 

@@ -7,7 +7,6 @@ import { cleanupOpenApiDoc } from "nestjs-zod";
 
 import { AppModule } from "./app.module";
 
-// oxlint-disable-next-line func-style
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bodyParser: false, // Required for better auth
@@ -48,4 +47,5 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3000);
 }
+
 bootstrap();

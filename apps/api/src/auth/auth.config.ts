@@ -1,6 +1,6 @@
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth } from "better-auth/minimal";
-import { openAPI } from "better-auth/plugins";
+import { admin, openAPI } from "better-auth/plugins";
 
 import db from "../core/database/database.client";
 import * as schema from "../core/database/schemas/auth.table";
@@ -36,6 +36,7 @@ export const auth = betterAuth({
     openAPI({
       disableDefaultReference: process.env.NODE_ENV === "production",
     }),
+    admin(),
   ],
   rateLimit: {
     enabled: true,
@@ -52,3 +53,5 @@ export const auth = betterAuth({
   },
   trustedOrigins: ALLOWED_ORIGINS.split(","),
 });
+
+export type Auth = typeof auth;
