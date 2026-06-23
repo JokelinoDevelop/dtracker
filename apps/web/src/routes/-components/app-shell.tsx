@@ -1,6 +1,5 @@
 import type React from "react";
 
-import { AppSidebar } from "#/routes/-components/app-sidebar.tsx";
 import { ThemeToggle } from "@/components/theme-toggle.tsx";
 import {
   Breadcrumb,
@@ -16,6 +15,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/routes/-components/app-sidebar.tsx";
 
 type AppShellProps = {
   children: React.ReactNode;

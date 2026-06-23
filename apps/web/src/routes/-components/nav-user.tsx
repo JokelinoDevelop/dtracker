@@ -13,7 +13,7 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "#/components/ui/avatar.tsx";
+} from "@/components/ui/avatar.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,14 +22,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "#/components/ui/dropdown-menu.tsx";
+} from "@/components/ui/dropdown-menu.tsx";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "#/components/ui/sidebar.tsx";
-import { authClient } from "#/lib/better-auth/auth-client.ts";
+} from "@/components/ui/sidebar.tsx";
+import { authClient } from "@/lib/better-auth/auth-client.ts";
+import { getInitials } from "@/utils/get-initials.ts";
 
 export function NavUser() {
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ export function NavUser() {
           >
             <Avatar>
               <AvatarImage />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarFallback>{getInitials(data?.user.name)}</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">{data?.user.name}</span>

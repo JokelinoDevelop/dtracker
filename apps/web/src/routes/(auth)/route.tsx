@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
-import { authClient } from "#/lib/better-auth/auth-client.ts";
+import { authClient } from "@/lib/better-auth/auth-client.ts";
 
 export const Route = createFileRoute("/(auth)")({
   component: RouteComponent,

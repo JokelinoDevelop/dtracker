@@ -18,7 +18,6 @@ export const SubmitButton = ({ children, ...props }: SubmitButtonProps) => {
         <Button
           {...props}
           type="submit"
-          size="lg"
           disabled={!canSubmit || props.disabled}
         >
           {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

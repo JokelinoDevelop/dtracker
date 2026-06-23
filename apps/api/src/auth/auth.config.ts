@@ -2,8 +2,9 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth } from "better-auth/minimal";
 import { admin, openAPI } from "better-auth/plugins";
 
-import db from "../core/database/database.client";
-import * as schema from "../core/database/schemas/auth.table";
+import db from "@/core/database/database.client";
+import * as schema from "@/core/database/schemas/auth.table";
+import { sleep } from "@/utils/common";
 
 const { ALLOWED_ORIGINS } = process.env;
 
@@ -31,6 +32,11 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
+    sendResetPassword: async (user, token) => {
+      void console.log("USER RESET:", user);
+      void console.log("USER TOKEN:", token);
+      await sleep(500);
+    },
   },
   plugins: [
     openAPI({

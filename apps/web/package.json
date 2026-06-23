@@ -2,9 +2,6 @@
   "name": "@dtracker/web",
   "private": true,
   "type": "module",
-  "imports": {
-    "#/*": "./src/*"
-  },
   "scripts": {
     "dev": "vite dev",
     "generate-routes": "tsr generate",

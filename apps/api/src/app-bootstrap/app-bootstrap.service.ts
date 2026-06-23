@@ -7,8 +7,8 @@ import { InjectDb } from "@/core/database/database.provider";
 import type { DatabaseService } from "@/core/database/database.provider";
 
 @Injectable()
-export class BootstrapService implements OnApplicationBootstrap {
-  private readonly logger = new Logger(BootstrapService.name);
+export class AppBootstrapService implements OnApplicationBootstrap {
+  private readonly logger = new Logger(AppBootstrapService.name);
   constructor(
     private readonly authService: AuthService<Auth>,
     private readonly configService: ConfigService,
@@ -18,6 +18,7 @@ export class BootstrapService implements OnApplicationBootstrap {
   async onApplicationBootstrap() {
     const adminUser = await this.db.query.users.findFirst({
       where: {
+        email: this.configService.getOrThrow<string>("ADMIN_EMAIL"),
         role: "admin",
       },
     });
@@ -39,7 +40,7 @@ export class BootstrapService implements OnApplicationBootstrap {
         },
       })
       .catch((error: Error) => {
-        this.logger.error(error.message);
+        this.logger.warn(error.message);
       });
   }
 }
