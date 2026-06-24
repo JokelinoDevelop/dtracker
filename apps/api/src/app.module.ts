@@ -12,6 +12,7 @@ import { CoreDatabaseModule } from "./core/database/database.module";
 import { CoreEnvConfigModule } from "./core/env-config/env-config.module";
 import { CoreLoggerModule } from "./core/logger/logger.module";
 import { CoreThrottlerModule } from "./core/throttler/throttler.module";
+import { MailerModule } from "./mailer/mailer.module";
 import { UsersModule } from "./users/users.module";
 
 @Module({
@@ -27,6 +28,7 @@ import { UsersModule } from "./users/users.module";
     }),
     UsersModule,
     AppBootstrapModule,
+    MailerModule,
   ],
   providers: [
     AppService,

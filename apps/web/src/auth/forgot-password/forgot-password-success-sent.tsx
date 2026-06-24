@@ -2,9 +2,9 @@ import { ArrowLeft, CheckCircle2, Mail } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 
 import { AppButton } from "@/components/app/app-button";
-import type { Step } from "@/routes/(auth)/forgot-password";
 
 import { useForgotPassword } from "./forgot-password-mutation";
+import type { Step } from "./forgot-password-page";
 
 type ForgotPasswordSuccessSentProps = {
   email: string;
@@ -17,9 +17,9 @@ export function ForgotPasswordSuccessSent({
 }: ForgotPasswordSuccessSentProps) {
   const { mutateAsync, isPending } = useForgotPassword();
   return (
-    <div className="space-y-8 text-center">
-      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-        <CheckCircle2 className="h-8 w-8 text-primary" />
+    <div className="space-y-8 text-center mb-14">
+      <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-primary/10">
+        <CheckCircle2 className="size-8 text-primary" />
       </div>
 
       <div className="space-y-2">

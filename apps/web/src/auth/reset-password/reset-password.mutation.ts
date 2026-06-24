@@ -3,16 +3,17 @@ import { toast } from "sonner";
 
 import { authClient } from "@/lib/better-auth/auth-client";
 
-type useForgotPasswordProps = {
-  email: string;
+type useResetPasswordProps = {
+  newPassword: string;
+  token: string;
 };
 
-export function useForgotPassword() {
+export function useResetPassword() {
   return useMutation({
-    mutationFn: async ({ email }: useForgotPasswordProps) => {
-      const { data, error } = await authClient.requestPasswordReset({
-        email,
-        redirectTo: `${window.location.origin}/reset-password`,
+    mutationFn: async ({ token, newPassword }: useResetPasswordProps) => {
+      const { data, error } = await authClient.resetPassword({
+        newPassword,
+        token,
       });
 
       if (error) {
@@ -24,9 +25,6 @@ export function useForgotPassword() {
     onError: (error) => {
       toast.error(error.message);
       console.error(error);
-    },
-    onSuccess: (data) => {
-      toast.success(data?.message);
     },
   });
 }

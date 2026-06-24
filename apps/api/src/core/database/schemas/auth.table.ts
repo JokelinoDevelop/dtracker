@@ -11,7 +11,7 @@ import {
   pgEnum,
 } from "drizzle-orm/pg-core";
 
-import { roles } from "@/auth/auth.permissions";
+import { roles } from "../../../auth/auth.permissions";
 
 export const userRole = pgEnum("user_role", roles);
 

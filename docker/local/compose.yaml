@@ -28,6 +28,14 @@ services:
     volumes:
       - redis-data:/data
 
+  mailhog:
+    image: mailhog/mailhog
+    restart: always
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
 volumes:
   postgres-data:
   redis-data:
+  mailhog-data:
