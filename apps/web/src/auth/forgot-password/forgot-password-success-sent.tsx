@@ -1,11 +1,10 @@
 import { ArrowLeft, CheckCircle2, Mail } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
-import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/better-auth/auth-client";
+import { AppButton } from "@/components/app/app-button";
+import type { Step } from "@/routes/(auth)/forgot-password";
 
-import type { Step } from "./forgot-password-page";
+import { useForgotPassword } from "./forgot-password-mutation";
 
 type ForgotPasswordSuccessSentProps = {
   email: string;
@@ -16,6 +15,7 @@ export function ForgotPasswordSuccessSent({
   email,
   setStep,
 }: ForgotPasswordSuccessSentProps) {
+  const { mutateAsync, isPending } = useForgotPassword();
   return (
     <div className="space-y-8 text-center">
       <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
@@ -45,39 +45,30 @@ export function ForgotPasswordSuccessSent({
       </div>
 
       <div className="flex flex-col gap-3">
-        <Button
-          variant="outline"
+        <AppButton
+          isLoading={isPending}
           onClick={handleResendEmail}
           size="lg"
           className="w-full"
         >
           Resend email
-        </Button>
+        </AppButton>
 
-        <Button
-          variant="ghost"
+        <AppButton
+          variant="outline"
           onClick={handleBack}
           size="lg"
           className="w-full"
         >
-          <ArrowLeft className="mr-2 h-4 w-4" />
+          <ArrowLeft className="mr-2" size={16} />
           Back
-        </Button>
+        </AppButton>
       </div>
     </div>
   );
 
   async function handleResendEmail() {
-    const { data, error } = await authClient.requestPasswordReset({
-      email,
-    });
-
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-
-    toast.success(data.message);
+    await mutateAsync({ email });
   }
 
   function handleBack() {

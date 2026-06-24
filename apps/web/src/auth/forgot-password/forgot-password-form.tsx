@@ -1,30 +1,25 @@
 import { Link } from "@tanstack/react-router";
 import { Mail } from "lucide-react";
-import { toast } from "sonner";
 
 import { useAppForm } from "@/components/form/hooks";
 import { FieldGroup } from "@/components/ui/field";
 import { Separator } from "@/components/ui/separator.tsx";
-import { authClient } from "@/lib/better-auth/auth-client.ts";
 
 import { forgotPasswordFormOptions } from "./forgot-password-form.options";
 import type { ForgotPasswordFormValue } from "./forgot-password-form.options";
+import { useForgotPassword } from "./forgot-password-mutation";
 
 type ForgotPasswordFormProps = {
   onSuccess: (value: ForgotPasswordFormValue) => void;
 };
 
 export function ForgotPasswordForm({ onSuccess }: ForgotPasswordFormProps) {
+  const { mutateAsync } = useForgotPassword();
+
   const form = useAppForm({
     ...forgotPasswordFormOptions,
     onSubmit: async ({ value }) => {
-      const { error } = await authClient.requestPasswordReset({
-        email: value.email,
-      });
-
-      if (error) {
-        toast.error(error.message);
-      }
+      await mutateAsync(value);
 
       onSuccess({
         email: value.email,

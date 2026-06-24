@@ -1,8 +1,8 @@
-import { Loader2 } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
 
+import { AppButton } from "../app/app-button";
 import { useFormContext } from "./hooks";
 
 export type SubmitButtonProps = {
@@ -15,14 +15,14 @@ export const SubmitButton = ({ children, ...props }: SubmitButtonProps) => {
   return (
     <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
       {([canSubmit, isSubmitting]) => (
-        <Button
+        <AppButton
           {...props}
           type="submit"
           disabled={!canSubmit || props.disabled}
+          isLoading={isSubmitting}
         >
-          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {children}
-        </Button>
+        </AppButton>
       )}
     </form.Subscribe>
   );

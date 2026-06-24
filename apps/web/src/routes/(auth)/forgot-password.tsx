@@ -1,14 +1,18 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 
+import { ForgotPasswordForm } from "@/auth/forgot-password/forgot-password-form";
+import type { ForgotPasswordFormValue } from "@/auth/forgot-password/forgot-password-form.options";
+import { ForgotPasswordSuccessSent } from "@/auth/forgot-password/forgot-password-success-sent";
 import { BrandLogo } from "@/components/brand-logo.tsx";
-
-import { ForgotPasswordForm } from "./forgot-password-form";
-import type { ForgotPasswordFormValue } from "./forgot-password-form.options";
-import { ForgotPasswordSuccessSent } from "./forgot-password-success-sent";
 
 export type Step = "forgot-password" | "success-sent";
 
-export function ForgotPasswordPage() {
+export const Route = createFileRoute("/(auth)/forgot-password")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const [step, setStep] = useState<Step>("forgot-password");
   const [email, setEmail] = useState("");
 

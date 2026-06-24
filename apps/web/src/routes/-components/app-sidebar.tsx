@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { TerminalIcon } from "lucide-react";
 import * as React from "react";
+import { Suspense } from "react";
 
 import {
   Sidebar,
@@ -14,6 +15,7 @@ import {
 import { NavUser } from "@/routes/-components/nav-user";
 
 import { NavMain } from "./nav-main";
+import { NavUserSkeleton } from "./nav-user-skeleton";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -37,7 +39,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser />
+        <Suspense fallback={<NavUserSkeleton />}>
+          <NavUser />
+        </Suspense>
       </SidebarFooter>
     </Sidebar>
   );

@@ -1,4 +1,4 @@
-import { useNavigate } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   ChevronsUpDownIcon,
   SparklesIcon,
@@ -6,9 +6,11 @@ import {
   CreditCardIcon,
   BellIcon,
   LogOutIcon,
+  Loader2,
 } from "lucide-react";
-import { toast } from "sonner";
 
+import { authQueries } from "@/auth/auth.queries";
+import { useSignOut } from "@/auth/sign-out/sign-out.mutation";
 import {
   Avatar,
   AvatarFallback,
@@ -29,21 +31,17 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar.tsx";
-import { authClient } from "@/lib/better-auth/auth-client.ts";
 import { getInitials } from "@/utils/get-initials.ts";
 
 export function NavUser() {
-  const navigate = useNavigate();
+  const { data } = useSuspenseQuery({
+    ...authQueries.session(),
+    select: (value) => value.data,
+  });
 
-  const { data, error: authError, isPending } = authClient.useSession();
+  const { mutateAsync, isPending } = useSignOut();
 
-  if (authError) {
-    return <div>Something bad happened {authError.message}</div>;
-  }
-
-  if (isPending) {
-    return <div>Loading</div>;
-  }
+  const nameInitials = getInitials(data?.user.name);
 
   const { isMobile } = useSidebar();
   return (
@@ -57,7 +55,7 @@ export function NavUser() {
           >
             <Avatar>
               <AvatarImage />
-              <AvatarFallback>{getInitials(data?.user.name)}</AvatarFallback>
+              <AvatarFallback>{nameInitials}</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">{data?.user.name}</span>
@@ -76,7 +74,7 @@ export function NavUser() {
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar>
                     <AvatarImage alt={data?.user.name} />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarFallback>{nameInitials}</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">
@@ -110,26 +108,17 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout}>
+            <DropdownMenuItem
+              disabled={isPending}
+              onClick={async () => await mutateAsync()}
+            >
               <LogOutIcon />
               Log out
+              {isPending && <Loader2 className="animate-spin ml-auto" />}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
   );
-
-  async function handleLogout() {
-    const { error } = await authClient.signOut();
-
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-
-    toast.success("You have signed out successfully!");
-
-    await navigate({ to: "/" });
-  }
 }

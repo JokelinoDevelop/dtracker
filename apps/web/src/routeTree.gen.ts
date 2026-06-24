@@ -12,9 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as authRouteRouteImport } from './routes/(auth)/route'
 import { Route as authIndexRouteImport } from './routes/(auth)/index'
+import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
 import { Route as ProtectedUsersIndexRouteImport } from './routes/_protected/users/index'
 import { Route as ProtectedDashboardIndexRouteImport } from './routes/_protected/dashboard/index'
-import { Route as authForgotPasswordIndexRouteImport } from './routes/(auth)/forgot-password/index'
 
 const ProtectedRoute = ProtectedRouteImport.update({
   id: '/_protected',
@@ -29,6 +29,11 @@ const authIndexRoute = authIndexRouteImport.update({
   path: '/',
   getParentRoute: () => authRouteRoute,
 } as any)
+const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => authRouteRoute,
+} as any)
 const ProtectedUsersIndexRoute = ProtectedUsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
@@ -39,21 +44,16 @@ const ProtectedDashboardIndexRoute = ProtectedDashboardIndexRouteImport.update({
   path: '/dashboard/',
   getParentRoute: () => ProtectedRoute,
 } as any)
-const authForgotPasswordIndexRoute = authForgotPasswordIndexRouteImport.update({
-  id: '/forgot-password/',
-  path: '/forgot-password/',
-  getParentRoute: () => authRouteRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof authIndexRoute
-  '/forgot-password/': typeof authForgotPasswordIndexRoute
+  '/forgot-password': typeof authForgotPasswordRoute
   '/dashboard/': typeof ProtectedDashboardIndexRoute
   '/users/': typeof ProtectedUsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof authIndexRoute
-  '/forgot-password': typeof authForgotPasswordIndexRoute
+  '/forgot-password': typeof authForgotPasswordRoute
   '/dashboard': typeof ProtectedDashboardIndexRoute
   '/users': typeof ProtectedUsersIndexRoute
 }
@@ -61,22 +61,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(auth)': typeof authRouteRouteWithChildren
   '/_protected': typeof ProtectedRouteWithChildren
+  '/(auth)/forgot-password': typeof authForgotPasswordRoute
   '/(auth)/': typeof authIndexRoute
-  '/(auth)/forgot-password/': typeof authForgotPasswordIndexRoute
   '/_protected/dashboard/': typeof ProtectedDashboardIndexRoute
   '/_protected/users/': typeof ProtectedUsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/forgot-password/' | '/dashboard/' | '/users/'
+  fullPaths: '/' | '/forgot-password' | '/dashboard/' | '/users/'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/forgot-password' | '/dashboard' | '/users'
   id:
     | '__root__'
     | '/(auth)'
     | '/_protected'
+    | '/(auth)/forgot-password'
     | '/(auth)/'
-    | '/(auth)/forgot-password/'
     | '/_protected/dashboard/'
     | '/_protected/users/'
   fileRoutesById: FileRoutesById
@@ -109,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authIndexRouteImport
       parentRoute: typeof authRouteRoute
     }
+    '/(auth)/forgot-password': {
+      id: '/(auth)/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof authForgotPasswordRouteImport
+      parentRoute: typeof authRouteRoute
+    }
     '/_protected/users/': {
       id: '/_protected/users/'
       path: '/users'
@@ -123,24 +130,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedDashboardIndexRouteImport
       parentRoute: typeof ProtectedRoute
     }
-    '/(auth)/forgot-password/': {
-      id: '/(auth)/forgot-password/'
-      path: '/forgot-password'
-      fullPath: '/forgot-password/'
-      preLoaderRoute: typeof authForgotPasswordIndexRouteImport
-      parentRoute: typeof authRouteRoute
-    }
   }
 }
 
 interface authRouteRouteChildren {
+  authForgotPasswordRoute: typeof authForgotPasswordRoute
   authIndexRoute: typeof authIndexRoute
-  authForgotPasswordIndexRoute: typeof authForgotPasswordIndexRoute
 }
 
 const authRouteRouteChildren: authRouteRouteChildren = {
+  authForgotPasswordRoute: authForgotPasswordRoute,
   authIndexRoute: authIndexRoute,
-  authForgotPasswordIndexRoute: authForgotPasswordIndexRoute,
 }
 
 const authRouteRouteWithChildren = authRouteRoute._addFileChildren(

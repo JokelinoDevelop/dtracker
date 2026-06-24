@@ -15,8 +15,7 @@
     "outDir": "./dist",
     "incremental": true,
     "paths": {
-      "@/*": ["./src/*"],
-      "@/utils/*": ["./utils/*"]
+      "@/*": ["./src/*"]
     },
     "skipLibCheck": true,
     "strict": true,

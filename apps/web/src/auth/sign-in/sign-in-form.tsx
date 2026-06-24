@@ -1,32 +1,19 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Lock, Mail } from "lucide-react";
-import { toast } from "sonner";
 
 import { useAppForm } from "@/components/form/hooks";
 import { FieldGroup } from "@/components/ui/field";
-import { authClient } from "@/lib/better-auth/auth-client.ts";
 
 import { signInFormOptions } from "./sign-in-form.options";
+import { useSignIn } from "./sign-in.mutation";
 
 export function SignInForm() {
-  const navigate = useNavigate();
+  const { mutateAsync } = useSignIn();
+
   const form = useAppForm({
     ...signInFormOptions,
     onSubmit: async ({ value }) => {
-      const { data, error } = await authClient.signIn.email({
-        email: value.email,
-        password: value.password,
-        rememberMe: value.rememberMe,
-      });
-
-      if (error) {
-        toast.error(error.message);
-        return;
-      }
-
-      toast.success(`Welcome back ${data.user.name}!`);
-
-      await navigate({ to: "/dashboard" });
+      await mutateAsync(value);
     },
   });
   return (

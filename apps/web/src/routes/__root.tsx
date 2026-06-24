@@ -1,12 +1,10 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { Outlet, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
-import { Toaster } from "@/components/ui/sonner.tsx";
-import { Providers } from "@/providers";
-
 import "../styles.css";
-import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
+import { Toaster } from "@/components/ui/sonner.tsx";
 
 export const Route = createRootRoute({
   shellComponent: RootComponent,
@@ -15,9 +13,7 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <>
-      <Providers>
-        <Outlet />
-      </Providers>
+      <Outlet />
       <Toaster richColors />
       <TanStackDevtools
         config={{
@@ -28,7 +24,10 @@ function RootComponent() {
             name: "Tanstack Router",
             render: <TanStackRouterDevtoolsPanel />,
           },
-          TanStackQueryDevtools,
+          {
+            name: "Tanstack Query",
+            render: <ReactQueryDevtoolsPanel />,
+          },
         ]}
       />
     </>

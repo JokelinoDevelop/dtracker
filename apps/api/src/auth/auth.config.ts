@@ -45,7 +45,7 @@ export const auth = betterAuth({
     admin(),
   ],
   rateLimit: {
-    enabled: true,
+    enabled: process.env.NODE_ENV === "production",
     storage: "database", // don't use in-memory rate limiting across multiple instances
   },
   secret: process.env.BETTER_AUTH_SECRET,
