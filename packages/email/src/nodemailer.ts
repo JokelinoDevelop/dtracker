@@ -1,7 +1,12 @@
+import { config } from "dotenv";
+import { expand } from "dotenv-expand";
 import { createTransport } from "nodemailer";
+
+expand(config({ path: "../../api/.env" }));
 
 const isProduction = process.env.NODE_ENV === "production";
 
+// Mail Transporter
 export const transporter = createTransport({
   host: process.env.SMTP_HOST,
   port: Number.parseInt(process.env.SMTP_PORT ?? "1025", 10),
@@ -13,14 +18,3 @@ export const transporter = createTransport({
     },
   }),
 });
-
-export async function sendMail(to: string, subject: string, html: string) {
-  const info = await transporter.sendMail({
-    from: process.env.MAIL_FROM,
-    html,
-    subject,
-    to,
-  });
-
-  return info;
-}

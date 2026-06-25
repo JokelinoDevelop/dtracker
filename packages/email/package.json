@@ -1,0 +1,36 @@
+{
+  "name": "@dtracker/email",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "dev": "tsdown --watch",
+    "build": "tsdown",
+    "email:dev": "email dev --port=3001"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "dotenv-expand": "^12.0.3",
+    "nodemailer": "^9.0.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-email": "6.6.4"
+  },
+  "devDependencies": {
+    "@dtracker/config": "workspace:*",
+    "@react-email/ui": "6.6.4",
+    "@types/node": "^26.0.0",
+    "@types/nodemailer": "^8.0.1",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@typescript/native-preview": "catalog:",
+    "tsdown": "^0.22.3"
+  }
+}

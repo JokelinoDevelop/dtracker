@@ -28,6 +28,7 @@
     "auth:generate": "pnpm dlx auth generate --config=./src/auth/auth.config.ts"
   },
   "dependencies": {
+    "@dtracker/email": "workspace:*",
     "@nest-lab/throttler-storage-redis": "^1.2.0",
     "@nestjs/common": "^11.1.18",
     "@nestjs/config": "^4.0.3",

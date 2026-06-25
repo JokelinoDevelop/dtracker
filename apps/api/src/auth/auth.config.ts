@@ -1,8 +1,7 @@
+import { sendResetPasswordMail } from "@dtracker/email";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth } from "better-auth/minimal";
 import { admin, openAPI } from "better-auth/plugins";
-
-import { sendMail } from "@/mailer/nodemailer";
 
 import db from "../core/database/database.client";
 import * as schema from "../core/database/schemas/auth.table";
@@ -39,7 +38,7 @@ export const auth = betterAuth({
     revokeSessionsOnPasswordReset: true,
     // oxlint-disable-next-line require-await
     sendResetPassword: async ({ user, url }) => {
-      void sendMail(user.email, "Reset Password", url);
+      void sendResetPasswordMail(user.email, url);
     },
   },
   plugins: [

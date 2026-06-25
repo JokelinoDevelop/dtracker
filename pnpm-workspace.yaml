@@ -8,6 +8,7 @@ allowBuilds:
   bcrypt: true
   esbuild: true
   lefthook: true
+  sharp: true
 
 catalog:
   "better-auth": ^1.6.18
