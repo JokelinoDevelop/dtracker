@@ -4,10 +4,15 @@ import { Outlet, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
 import "../styles.css";
+
+import { GlobalRouteNotFound } from "@/components/global/global-not-found";
+import { GlobalRouteError } from "@/components/global/global-route-error";
 import { Toaster } from "@/components/ui/sonner.tsx";
 
 export const Route = createRootRoute({
-  shellComponent: RootComponent,
+  component: RootComponent,
+  errorComponent: GlobalRouteError,
+  notFoundComponent: GlobalRouteNotFound,
 });
 
 function RootComponent() {
