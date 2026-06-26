@@ -3,6 +3,8 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth } from "better-auth/minimal";
 import { admin, openAPI } from "better-auth/plugins";
 
+import { redisClient } from "@/core/cache-manager/redis-client";
+
 import db from "../core/database/database.client";
 import * as schema from "../core/database/schemas/auth.table";
 
@@ -48,6 +50,20 @@ export const auth = betterAuth({
     }),
     admin(),
   ],
+  secondaryStorage: {
+    delete: async (key) => {
+      await redisClient.del(key);
+    },
+    get: async (key) => await redisClient.get(key),
+    set: async (key, value, ttl) => {
+      // oxlint-disable-next-line unicorn/prefer-ternary
+      if (ttl) {
+        await redisClient.set(key, value, { EX: ttl });
+      } else {
+        await redisClient.set(key, value);
+      }
+    },
+  },
   secret: process.env.BETTER_AUTH_SECRET,
   session: {
     cookieCache: {

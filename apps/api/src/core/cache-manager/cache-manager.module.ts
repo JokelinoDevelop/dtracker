@@ -1,22 +1,16 @@
 import KeyvRedis from "@keyv/redis";
 import { CacheInterceptor, CacheModule } from "@nestjs/cache-manager";
-import { Module } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import { Logger, Module, OnModuleInit } from "@nestjs/common";
 import { APP_INTERCEPTOR } from "@nestjs/core";
+
+import { redisClient } from "./redis-client";
 
 @Module({
   imports: [
-    CacheModule.registerAsync({
-      inject: [ConfigService],
+    CacheModule.register({
       isGlobal: true,
-      useFactory: (configService: ConfigService) => ({
-        stores: [
-          new KeyvRedis({
-            url: configService.getOrThrow<string>("REDIS_URL"),
-          }),
-        ],
-        ttl: 1000 * 60 * 5, // 5 min default fallback in miliseconds
-      }),
+      stores: [new KeyvRedis(redisClient)],
+      ttl: 1000 * 60 * 5, // 5 min default fallback in miliseconds
     }),
   ],
   providers: [
@@ -26,4 +20,17 @@ import { APP_INTERCEPTOR } from "@nestjs/core";
     },
   ],
 })
-export class CoreCacheManagerModule {}
+export class CoreCacheManagerModule implements OnModuleInit {
+  private readonly logger = new Logger(CoreCacheManagerModule.name);
+  async onModuleInit() {
+    if (!redisClient.isOpen) {
+      try {
+        await redisClient.connect();
+        this.logger.log("Redis connected successfully");
+      } catch (error) {
+        this.logger.error("Error connecting to Redis", error);
+        throw error;
+      }
+    }
+  }
+}
