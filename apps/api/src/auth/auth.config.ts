@@ -35,6 +35,7 @@ export const auth = betterAuth({
     maxPasswordLength: 20,
     minPasswordLength: 8,
     requireEmailVerification: true,
+    resetPasswordTokenExpiresIn: 1800, // 1800 s = 30min
     revokeSessionsOnPasswordReset: true,
     // oxlint-disable-next-line require-await
     sendResetPassword: async ({ user, url }) => {
@@ -47,10 +48,6 @@ export const auth = betterAuth({
     }),
     admin(),
   ],
-  rateLimit: {
-    enabled: process.env.NODE_ENV === "production",
-    storage: "database", // don't use in-memory rate limiting across multiple instances
-  },
   secret: process.env.BETTER_AUTH_SECRET,
   session: {
     cookieCache: {

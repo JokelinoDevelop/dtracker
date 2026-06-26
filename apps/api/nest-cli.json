@@ -4,10 +4,5 @@
   "sourceRoot": "src",
   "generateOptions": {
     "spec": false
-  },
-  "compilerOptions": {
-    "deleteOutDir": true,
-    "builder": "swc",
-    "typeCheck": true
   }
 }

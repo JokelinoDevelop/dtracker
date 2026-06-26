@@ -4,22 +4,17 @@ import { ConfigService } from "@nestjs/config";
 import { APP_GUARD } from "@nestjs/core";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 
-import { THROTTLER_OPTIONS } from "./throttler.helper";
+import { THROTTLER_OPTIONS } from "./throttler.options";
 
 @Module({
   imports: [
     ThrottlerModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         errorMessage: "Wow! Slow down. You have hit the rate limit",
-        generateKey: (trackerString, throttlerName) =>
-          `${trackerString}:${throttlerName}`,
-        getTracker: (req) => (req.ips?.length ? req.ips[0] : req.ip), // handles X-Forwarded-For (proxies, Docker, nginx)
-        storage: new ThrottlerStorageRedisService({
-          host: config.getOrThrow("REDIS_HOST"),
-          password: config.get("REDIS_PASSWORD"),
-          port: config.getOrThrow("REDIS_PORT"),
-        }),
+        storage: new ThrottlerStorageRedisService(
+          configService.getOrThrow<string>("REDIS_URL")
+        ),
         throttlers: THROTTLER_OPTIONS,
       }),
     }),

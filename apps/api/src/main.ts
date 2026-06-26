@@ -1,5 +1,6 @@
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
+import { NestExpressApplication } from "@nestjs/platform-express";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import helmet from "helmet";
 import { Logger } from "nestjs-pino";
@@ -8,7 +9,7 @@ import { cleanupOpenApiDoc } from "nestjs-zod";
 import { AppModule } from "./app.module";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bodyParser: false, // Required for better auth
     bufferLogs: true,
   });
@@ -26,13 +27,9 @@ async function bootstrap() {
 
   SwaggerModule.setup("api/swagger", app, cleanupOpenApiDoc(openApiDoc));
 
+  app.use(helmet());
+
   const configService: ConfigService = app.get(ConfigService);
-
-  const NODE_ENV = configService.getOrThrow<string>("NODE_ENV");
-
-  if (NODE_ENV === "production") {
-    app.use(helmet());
-  }
 
   const allowedOrigins = configService.getOrThrow("ALLOWED_ORIGINS");
 
@@ -45,7 +42,15 @@ async function bootstrap() {
 
   app.useLogger(app.get(Logger));
 
+  // By setting the trust proxy setting on the Express API, it automatically tells Express to trust the X-Forwarded-For header and parse it to an array, storing it in the request object in its ips array (i.e., req.ips).
+  app.set("trust proxy", true);
+
   await app.listen(process.env.PORT ?? 3000);
+
+  if (import.meta.webpackHot) {
+    import.meta.webpackHot.accept();
+    import.meta.webpackHot.dispose(() => app.close());
+  }
 }
 
 bootstrap();

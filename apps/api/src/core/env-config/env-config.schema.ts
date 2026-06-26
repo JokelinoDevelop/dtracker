@@ -47,4 +47,5 @@ export const envConfigSchema = z.object({
   REDIS_HOST: z.string().nonempty(),
   REDIS_PASSWORD: z.string().nonempty(),
   REDIS_PORT: z.coerce.number().positive(),
+  REDIS_URL: z.string().nonempty(),
 });
