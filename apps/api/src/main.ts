@@ -1,4 +1,3 @@
-import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
@@ -7,6 +6,7 @@ import { Logger } from "nestjs-pino";
 import { cleanupOpenApiDoc } from "nestjs-zod";
 
 import { AppModule } from "./app.module";
+import { env } from "./env";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -29,9 +29,7 @@ async function bootstrap() {
 
   app.use(helmet());
 
-  const configService: ConfigService = app.get(ConfigService);
-
-  const allowedOrigins = configService.getOrThrow("ALLOWED_ORIGINS");
+  const allowedOrigins = env.ALLOWED_ORIGINS;
 
   app.enableCors({
     allowedHeaders: "Content-Type, Authorization",
@@ -45,7 +43,7 @@ async function bootstrap() {
   // By setting the trust proxy setting on the Express API, it automatically tells Express to trust the X-Forwarded-For header and parse it to an array, storing it in the request object in its ips array (i.e., req.ips).
   app.set("trust proxy", true);
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(env.API_PORT ?? 3000);
 
   if (import.meta.webpackHot) {
     import.meta.webpackHot.accept();

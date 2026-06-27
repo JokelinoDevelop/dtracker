@@ -1,33 +1,22 @@
 import { Module } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { LoggerModule } from "nestjs-pino";
 
-import { CoreEnvConfigModule } from "../env-config/env-config.module";
+import { env } from "@/env";
 
 @Module({
   imports: [
-    LoggerModule.forRootAsync({
-      imports: [CoreEnvConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        const isProduction =
-          configService.getOrThrow("NODE_ENV") === "production";
-
-        const logLevel = configService.getOrThrow("LOG_LEVEL");
-
-        return {
-          pinoHttp: {
-            level: logLevel,
-            transport: isProduction
-              ? undefined
-              : {
-                  options: {
-                    singleLine: true,
-                  },
-                  target: "pino-pretty",
+    LoggerModule.forRoot({
+      pinoHttp: {
+        level: env.LOG_LEVEL,
+        transport:
+          env.NODE_ENV === "production"
+            ? undefined
+            : {
+                options: {
+                  singleLine: true,
                 },
-          },
-        };
+                target: "pino-pretty",
+              },
       },
     }),
   ],

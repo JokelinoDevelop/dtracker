@@ -6,6 +6,7 @@ export default defineConfig({
       "@src": "./src",
       "@test": "./test",
     },
+    tsconfigPaths: true,
   },
   test: {
     alias: {

@@ -8,6 +8,7 @@ export default defineConfig({
       // oxlint-disable-next-line unicorn/prefer-module -> NestJS CommonJS stuff
       src: path.resolve(__dirname, "./src"),
     },
+    tsconfigPaths: true,
   },
   test: {
     alias: {

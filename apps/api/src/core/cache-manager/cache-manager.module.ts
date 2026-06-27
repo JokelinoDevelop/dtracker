@@ -1,6 +1,11 @@
 import KeyvRedis from "@keyv/redis";
 import { CacheInterceptor, CacheModule } from "@nestjs/cache-manager";
-import { Logger, Module, OnModuleInit } from "@nestjs/common";
+import {
+  Logger,
+  Module,
+  OnApplicationBootstrap,
+  OnApplicationShutdown,
+} from "@nestjs/common";
 import { APP_INTERCEPTOR } from "@nestjs/core";
 
 import { redisClient } from "./redis-client";
@@ -20,9 +25,12 @@ import { redisClient } from "./redis-client";
     },
   ],
 })
-export class CoreCacheManagerModule implements OnModuleInit {
+export class CoreCacheManagerModule
+  implements OnApplicationBootstrap, OnApplicationShutdown
+{
   private readonly logger = new Logger(CoreCacheManagerModule.name);
-  async onModuleInit() {
+
+  async onApplicationBootstrap() {
     if (!redisClient.isOpen) {
       try {
         await redisClient.connect();
@@ -31,6 +39,13 @@ export class CoreCacheManagerModule implements OnModuleInit {
         this.logger.error("Error connecting to Redis", error);
         throw error;
       }
+    }
+  }
+
+  async onApplicationShutdown() {
+    if (redisClient.isOpen) {
+      await redisClient.close(); // or quit(), see below
+      this.logger.log("Redis disconnected");
     }
   }
 }

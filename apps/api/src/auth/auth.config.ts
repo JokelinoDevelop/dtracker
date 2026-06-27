@@ -4,15 +4,10 @@ import { betterAuth } from "better-auth/minimal";
 import { admin, openAPI } from "better-auth/plugins";
 
 import { redisClient } from "@/core/cache-manager/redis-client";
+import { db } from "@/core/database/database.provider";
+import { env } from "@/env";
 
-import db from "../core/database/database.client";
 import * as schema from "../core/database/schemas/auth.table";
-
-const { ALLOWED_ORIGINS } = process.env;
-
-if (!ALLOWED_ORIGINS) {
-  throw new Error("ALLOWED_ORIGINS env variable is missing!");
-}
 
 export const auth = betterAuth({
   advanced: {
@@ -22,10 +17,10 @@ export const auth = betterAuth({
     database: {
       generateId: "uuid",
     },
-    useSecureCookies: process.env.NODE_ENV === "production",
+    useSecureCookies: env.NODE_ENV === "production",
   },
   appName: "DTracker",
-  baseURL: process.env.API_URL,
+  baseURL: env.API_URL,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema, // pass your schema explicitly so the adapter doesn't have to introspect
@@ -46,7 +41,7 @@ export const auth = betterAuth({
   },
   plugins: [
     openAPI({
-      disableDefaultReference: process.env.NODE_ENV === "production",
+      disableDefaultReference: env.NODE_ENV === "production",
     }),
     admin(),
   ],
@@ -64,7 +59,7 @@ export const auth = betterAuth({
       }
     },
   },
-  secret: process.env.BETTER_AUTH_SECRET,
+  secret: env.BETTER_AUTH_SECRET,
   session: {
     cookieCache: {
       enabled: true,
@@ -73,7 +68,7 @@ export const auth = betterAuth({
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // refresh once per day,
   },
-  trustedOrigins: ALLOWED_ORIGINS.split(","),
+  trustedOrigins: env.ALLOWED_ORIGINS,
 });
 
 export type Auth = typeof auth;
