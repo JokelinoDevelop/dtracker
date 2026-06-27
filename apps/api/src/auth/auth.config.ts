@@ -1,13 +1,20 @@
+import { redisStorage } from "@better-auth/redis-storage";
 import { sendResetPasswordMail } from "@dtracker/email";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth } from "better-auth/minimal";
 import { admin, openAPI } from "better-auth/plugins";
+import { Redis } from "ioredis";
 
-import { redisClient } from "@/core/cache-manager/redis-client";
 import { db } from "@/core/database/database.provider";
 import { env } from "@/env";
 
 import * as schema from "../core/database/schemas/auth.table";
+
+const redis = new Redis({
+  host: env.REDIS_HOST,
+  password: env.REDIS_PASSWORD,
+  port: env.REDIS_PORT,
+});
 
 export const auth = betterAuth({
   advanced: {
@@ -31,7 +38,6 @@ export const auth = betterAuth({
     enabled: true,
     maxPasswordLength: 20,
     minPasswordLength: 8,
-    requireEmailVerification: true,
     resetPasswordTokenExpiresIn: 1800, // 1800 s = 30min
     revokeSessionsOnPasswordReset: true,
     // oxlint-disable-next-line require-await
@@ -45,20 +51,10 @@ export const auth = betterAuth({
     }),
     admin(),
   ],
-  secondaryStorage: {
-    delete: async (key) => {
-      await redisClient.del(key);
-    },
-    get: async (key) => await redisClient.get(key),
-    set: async (key, value, ttl) => {
-      // oxlint-disable-next-line unicorn/prefer-ternary
-      if (ttl) {
-        await redisClient.set(key, value, { EX: ttl });
-      } else {
-        await redisClient.set(key, value);
-      }
-    },
-  },
+  secondaryStorage: redisStorage({
+    client: redis,
+    keyPrefix: "better-auth:", // optional, defaults to "better-auth:"
+  }),
   secret: env.BETTER_AUTH_SECRET,
   session: {
     cookieCache: {

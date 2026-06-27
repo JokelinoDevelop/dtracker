@@ -27,6 +27,7 @@
     "auth:generate": "pnpm dlx auth generate --config=./src/auth/auth.config.ts"
   },
   "dependencies": {
+    "@better-auth/redis-storage": "^1.6.22",
     "@dtracker/email": "workspace:*",
     "@keyv/redis": "^5.1.6",
     "@nest-lab/throttler-storage-redis": "^1.2.0",
@@ -46,6 +47,7 @@
     "drizzle-orm": "^1.0.0-beta.22",
     "drizzle-seed": "^1.0.0-beta.22",
     "helmet": "^8.1.0",
+    "ioredis": "^5.11.1",
     "nestjs-pino": "^4.6.1",
     "nestjs-zod": "^5.2.1",
     "nodemailer": "^9.0.1",
