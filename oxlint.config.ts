@@ -19,6 +19,13 @@ export default defineConfig({
   ],
   overrides: [
     {
+      files: ["apps/mobile/src/**/*.{ts,tsx}"],
+      rules: {
+        "no-use-before-define": "off",
+        "react/no-unstable-nested-components": "off",
+      },
+    },
+    {
       files: ["apps/api/src/core/database/schemas/**/*.{ts,tsx}"],
       rules: { "sort-keys": "off" },
     },

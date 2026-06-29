@@ -34,7 +34,6 @@ export const auth = betterAuth({
     usePlural: true,
   }),
   emailAndPassword: {
-    disableSignUp: true,
     enabled: true,
     maxPasswordLength: 20,
     minPasswordLength: 8,
