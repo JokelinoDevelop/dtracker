@@ -1,12 +1,12 @@
 import { Text, Pressable } from "react-native";
 
-import { useOnboarding } from "./onboarding-provider";
+import { useAuthStore } from "../auth/auth.store";
 
 const OnboardingSkipButton = () => {
-  const { finishOnboarding } = useOnboarding();
+  const { completeOnboarding } = useAuthStore();
 
   return (
-    <Pressable onPress={finishOnboarding} hitSlop={10} className="px-2 py-1">
+    <Pressable onPress={completeOnboarding} hitSlop={10} className="px-2 py-1">
       <Text className="text-primary text-base font-medium">Skip</Text>
     </Pressable>
   );

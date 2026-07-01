@@ -23,7 +23,7 @@ export function Button({
   return (
     <Pressable
       className={cn(
-        "w-full items-center justify-center rounded-xl bg-primary px-4 py-3 active:opacity-80",
+        "w-full items-center justify-center rounded-xl bg-primary p-4 active:opacity-80",
         isDisabled && "opacity-50",
         className
       )}
@@ -32,7 +32,7 @@ export function Button({
     >
       <View className="flex-row items-center gap-x-2">
         {loading ? <ActivityIndicator color="#ffffff" size="small" /> : null}
-        <Text className="text-base font-semibold text-white">
+        <Text className="text-base font-bold text-white">
           {loading ? (loadingTitle ?? title) : title}
         </Text>
       </View>

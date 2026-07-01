@@ -2,14 +2,14 @@ import type { ReactNode } from "react";
 import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 
 import { SafeAreaView } from "@/components/safe-area-view";
+import { useAuthStore } from "@/features/auth/auth.store";
 import { useSession } from "@/features/auth/hooks/use-session";
 import { useSignOut } from "@/features/auth/sign-out/sign-out.mutation";
-import { useOnboarding } from "@/features/onboarding/onboarding-provider";
 import { cn } from "@/lib/utils";
 
 const SettingsScreen = () => {
   const { data: session } = useSession();
-  const { resetOnboarding } = useOnboarding();
+  const { resetOnboarding } = useAuthStore();
 
   const { mutateAsync: signOut, isPending: isSigningOut } = useSignOut();
 
