@@ -1,9 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { useRef, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import type { TextInput } from "react-native";
-import Toast from "react-native-toast-message";
 
 import FacebookLogo from "@/assets/images/facebook.svg";
 import GoogleLogo from "@/assets/images/google.svg";
@@ -12,12 +11,21 @@ import { useAppForm } from "@/components/form/hooks";
 import { Separator } from "@/components/ui/separator";
 
 import { signInFormOptions } from "./sign-in-form.options";
+import type { SocialProvider } from "./sign-in-social.mutation";
+import { useSocialSignIn } from "./sign-in-social.mutation";
 import { useSignIn } from "./sign-in.mutation";
 
 export function SignInForm() {
   const [formError, setFormError] = useState<string | null>(null);
   const passwordRef = useRef<TextInput>(null);
+
   const { mutateAsync } = useSignIn();
+
+  const {
+    mutateAsync: signInWithSocial,
+    isPending: isSocialSignInPending,
+    variables: socialSignInVariables,
+  } = useSocialSignIn();
 
   const form = useAppForm({
     ...signInFormOptions,
@@ -35,6 +43,10 @@ export function SignInForm() {
       }
     },
   });
+
+  const activeSocialProvider = isSocialSignInPending
+    ? socialSignInVariables?.provider
+    : null;
 
   return (
     <View className="gap-y-4">
@@ -86,20 +98,46 @@ export function SignInForm() {
 
       <View className="flex-row justify-center items-center gap-x-10">
         <Pressable
+          accessibilityLabel="Sign in with Google"
+          accessibilityRole="button"
           className="p-5 bg-white rounded-xl border border-border"
-          onPress={() => {
-            Toast.show({
-              text1: "Google sign in successful",
-              type: "success",
-            });
-          }}
+          disabled={isSocialSignInPending}
+          onPress={() => handleSocialSignIn("google")}
         >
-          <GoogleLogo />
+          {activeSocialProvider === "google" ? (
+            <ActivityIndicator className="w-[30px] h-[30px]" />
+          ) : (
+            <GoogleLogo />
+          )}
         </Pressable>
-        <Pressable className="px-[27px] py-5 bg-white rounded-xl border border-border">
-          <FacebookLogo />
+        <Pressable
+          accessibilityLabel="Sign in with Facebook"
+          accessibilityRole="button"
+          className="px-[27px] py-5 bg-white rounded-xl border border-border"
+          disabled={isSocialSignInPending}
+          onPress={() => handleSocialSignIn("facebook")}
+        >
+          {activeSocialProvider === "facebook" ? (
+            <ActivityIndicator className="w-[30px] h-[30px]" />
+          ) : (
+            <FacebookLogo />
+          )}
         </Pressable>
       </View>
     </View>
   );
+
+  async function handleSocialSignIn(provider: SocialProvider) {
+    setFormError(null);
+
+    try {
+      await signInWithSocial({ provider });
+    } catch (error) {
+      setFormError(
+        error instanceof Error
+          ? error.message
+          : "Unable to sign in. Please try again."
+      );
+    }
+  }
 }

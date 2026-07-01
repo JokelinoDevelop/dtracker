@@ -17,6 +17,17 @@ const redis = new Redis({
   port: env.REDIS_PORT,
 });
 
+// Uncomment this when i get the ENV vars for facebook
+// const socialProviders =
+//   env.FACEBOOK_CLIENT_ID && env.FACEBOOK_CLIENT_SECRET
+//     ? {
+//         facebook: {
+//           clientId: env.FACEBOOK_CLIENT_ID,
+//           clientSecret: env.FACEBOOK_CLIENT_SECRET,
+//         },
+//       }
+//     : {};
+
 export const auth = betterAuth({
   advanced: {
     crossSubDomainCookies: {
@@ -87,6 +98,13 @@ export const auth = betterAuth({
     },
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // refresh once per day,
+  },
+  socialProviders: {
+    google: {
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+      prompt: "select_account",
+    },
   },
   trustedOrigins: [
     ...env.ALLOWED_ORIGINS,

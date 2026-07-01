@@ -27,7 +27,11 @@ async function bootstrap() {
 
   SwaggerModule.setup("api/swagger", app, cleanupOpenApiDoc(openApiDoc));
 
-  app.use(helmet());
+  app.use(
+    helmet({
+      contentSecurityPolicy: env.NODE_ENV === "production" ? undefined : false, // Disable CSP in development mode, api/auth/reference doesnt open bcs of that
+    })
+  );
 
   const allowedOrigins = env.ALLOWED_ORIGINS;
 
