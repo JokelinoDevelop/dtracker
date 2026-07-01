@@ -1,8 +1,9 @@
+import { expo } from "@better-auth/expo";
 import { redisStorage } from "@better-auth/redis-storage";
-import { sendResetPasswordMail } from "@dtracker/email";
+import { sendOtpMail, sendResetPasswordMail } from "@dtracker/email";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth } from "better-auth/minimal";
-import { admin, openAPI } from "better-auth/plugins";
+import { admin, emailOTP, openAPI } from "better-auth/plugins";
 import { Redis } from "ioredis";
 
 import { db } from "@/core/database/database.provider";
@@ -45,6 +46,30 @@ export const auth = betterAuth({
     },
   },
   plugins: [
+    expo(), // Expo plugin needed for the mobile app
+    emailOTP({
+      // oxlint-disable-next-line require-await
+      async sendVerificationOTP({ email, otp, type }) {
+        let purpose: typeof type = "sign-in";
+
+        switch (type) {
+          case "sign-in": {
+            purpose = "sign-in";
+            break;
+          }
+          case "email-verification": {
+            purpose = "email-verification";
+            break;
+          }
+          default: {
+            purpose = "forget-password";
+            break;
+          }
+        }
+
+        void sendOtpMail(email, otp, purpose);
+      },
+    }),
     openAPI({
       disableDefaultReference: env.NODE_ENV === "production",
     }),
@@ -63,7 +88,17 @@ export const auth = betterAuth({
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // refresh once per day,
   },
-  trustedOrigins: env.ALLOWED_ORIGINS,
+  trustedOrigins: [
+    ...env.ALLOWED_ORIGINS,
+    // Development mode - Expo's exp:// scheme with local IP ranges
+    ...(env.NODE_ENV === "development"
+      ? [
+          "exp://", // Trust all Expo URLs (prefix matching)
+          "exp://**", // Trust all Expo URLs (wildcard matching)
+          "exp://192.168.*.*:*/**", // Trust 192.168.x.x IP range with any port and path
+        ]
+      : []),
+  ],
 });
 
 export type Auth = typeof auth;

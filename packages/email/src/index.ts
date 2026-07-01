@@ -1,4 +1,5 @@
+export { default as OtpEmail } from "./templates/otp-email";
 export { default as ResetPasswordEmail } from "./templates/reset-password-email";
-export { renderResetPasswordEmail } from "./render";
+export { renderOtpEmail, renderResetPasswordEmail } from "./render";
 export { transporter } from "./nodemailer";
-export { sendMail, sendResetPasswordMail } from "./send-mail";
+export { sendMail, sendOtpMail, sendResetPasswordMail } from "./send-mail";

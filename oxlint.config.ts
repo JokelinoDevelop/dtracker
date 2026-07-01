@@ -22,7 +22,9 @@ export default defineConfig({
       files: ["apps/mobile/src/**/*.{ts,tsx}"],
       rules: {
         "no-use-before-define": "off",
+        "node/global-require": "off",
         "react/no-unstable-nested-components": "off",
+        "unicorn/prefer-module": "off",
       },
     },
     {

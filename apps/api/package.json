@@ -27,6 +27,7 @@
     "auth:generate": "pnpm dlx auth generate --config=./src/auth/auth.config.ts"
   },
   "dependencies": {
+    "@better-auth/expo": "^1.6.22",
     "@better-auth/redis-storage": "^1.6.22",
     "@dtracker/email": "workspace:*",
     "@keyv/redis": "^5.1.6",

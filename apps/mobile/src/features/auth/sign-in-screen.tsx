@@ -2,7 +2,8 @@ import { Image } from "expo-image";
 import { KeyboardAvoidingView, ScrollView, Text, View } from "react-native";
 
 import { SafeAreaView } from "@/components/safe-area-view";
-import { SignInForm } from "@/features/auth/sign-in/sign-in-form";
+
+import { SignInForm } from "./sign-in/sign-in-form";
 
 const SignInScreen = () => (
   <SafeAreaView className="flex-1 bg-background">
@@ -25,7 +26,7 @@ const SignInScreen = () => (
             />
             <View className="items-center gap-y-2">
               <Text className="text-3xl font-semibold text-foreground">
-                Welcome back hustler!
+                Welcome back
               </Text>
               <Text className="text-center text-base text-muted-foreground">
                 Sign in to your account

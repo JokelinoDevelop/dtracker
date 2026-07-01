@@ -2,9 +2,9 @@ import { Image } from "expo-image";
 import { KeyboardAvoidingView, ScrollView, Text, View } from "react-native";
 
 import { SafeAreaView } from "@/components/safe-area-view";
-import { SignInForm } from "@/features/auth/sign-in/sign-in-form";
+import { ForgotPasswordForm } from "@/features/auth/forgot-password/forgot-password-form";
 
-const SignInScreen = () => (
+const ForgotPasswordScreen = () => (
   <SafeAreaView className="flex-1 bg-background">
     <KeyboardAvoidingView
       behavior={process.env.EXPO_OS === "ios" ? "padding" : "height"}
@@ -13,7 +13,7 @@ const SignInScreen = () => (
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         keyboardShouldPersistTaps="handled"
-        contentContainerClassName="flex-grow justify-center px-6 pb-8"
+        contentContainerClassName="flex-grow justify-center px-6 pb-8 pt-12"
       >
         <View className="gap-y-8">
           <View className="items-center gap-y-4">
@@ -25,19 +25,19 @@ const SignInScreen = () => (
             />
             <View className="items-center gap-y-2">
               <Text className="text-3xl font-semibold text-foreground">
-                Welcome back hustler!
+                Reset password
               </Text>
               <Text className="text-center text-base text-muted-foreground">
-                Sign in to your account
+                Enter your email and we'll send you a verification code
               </Text>
             </View>
           </View>
 
-          <SignInForm />
+          <ForgotPasswordForm />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
   </SafeAreaView>
 );
 
-export default SignInScreen;
+export default ForgotPasswordScreen;
