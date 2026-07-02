@@ -5,12 +5,7 @@ export default function OnboardingLayout() {
     <Stack
       screenOptions={{
         animation: "fade",
-        headerBackTitle: "Previous",
-        headerShadowVisible: false,
-        headerStyle: {
-          backgroundColor: "white",
-        },
-        headerTitle: "",
+        headerShown: false,
       }}
     />
   );

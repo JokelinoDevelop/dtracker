@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
@@ -109,6 +110,9 @@ export function ForgotPasswordForm() {
           name="otp"
           children={(field) => (
             <field.TextField
+              leftIcon={
+                <Ionicons name="shield-checkmark" size={16} color="white" />
+              }
               ref={otpRef}
               autoComplete="one-time-code"
               keyboardType="number-pad"
@@ -125,6 +129,7 @@ export function ForgotPasswordForm() {
           name="password"
           children={(field) => (
             <field.PasswordField
+              leftIcon={<Ionicons name="lock-closed" size={16} color="white" />}
               ref={passwordRef}
               autoComplete="new-password"
               label="New password"
@@ -140,6 +145,7 @@ export function ForgotPasswordForm() {
           name="confirmPassword"
           children={(field) => (
             <field.PasswordField
+              leftIcon={<Ionicons name="lock-closed" size={16} color="white" />}
               ref={confirmPasswordRef}
               autoComplete="new-password"
               label="Confirm password"
@@ -181,6 +187,7 @@ export function ForgotPasswordForm() {
         name="email"
         children={(field) => (
           <field.TextField
+            leftIcon={<Ionicons name="mail" size={16} color="white" />}
             autoComplete="email"
             keyboardType="email-address"
             label="Email"
